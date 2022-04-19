@@ -65,25 +65,38 @@ const Formulario = () => {
       return
     }
 
-    /*setListaEmpleados([
-      ...listaEmpleados,
-      { id: nanoid(), aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario }
-    ])*/
-    const db = firebase.firestore()
-    const nuevoEmpleado = {
-      aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario
-    }
-    const data = await db.collection('empleados').add(nuevoEmpleado)
+    try {
+      swal({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Agregado',
+        showConfirmButton: false,
+        timer: 700
+      })
+      const db = firebase.firestore()
+      const nuevoEmpleado = {
+        aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario
+      }
+      const data = await db.collection('empleados').add(nuevoEmpleado)
 
-    e.target.reset()
-    setNombre('')
-    setCedula('')
-    setEdad('')
-    setEmail('')
-    setTelefono('')
-    setTiempo('')
-    setSalario('')
-    setError(null)
+      setListaEmpleados([
+        ...listaEmpleados,
+        { id: nanoid(), aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario }
+      ])
+
+      e.target.reset()
+      setNombre('')
+      setCedula('')
+      setEdad('')
+      setEmail('')
+      setTelefono('')
+      setTiempo('')
+      setSalario('')
+      setError(null)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const editar = item => {
@@ -99,7 +112,7 @@ const Formulario = () => {
     setError(null)
   }
 
-  const editarEmpleado = e => {
+  const editarEmpleado = async e => {
     e.preventDefault()
 
     if (!nombre.trim()) {
@@ -131,19 +144,27 @@ const Formulario = () => {
       return
     }
 
-    const arrayEditado = listaEmpleados.map(
-      item => item.id === id ? { id: id, aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario } : item
-    )
-    setListaEmpleados(arrayEditado)
-    setId('')
-    setNombre('')
-    setCedula('')
-    setEdad('')
-    setEmail('')
-    setTelefono('')
-    setTiempo('')
-    setSalario('')
-    setModoEdicion(false)
+    try {
+      const db = firebase.firestore()
+      await db.collection('empleados').doc(id).update({
+        aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario
+      })
+      const arrayEditado = listaEmpleados.map(
+        item => item.id === id ? { id: id, aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario } : item
+      )
+      setListaEmpleados(arrayEditado)
+      setId('')
+      setNombre('')
+      setCedula('')
+      setEdad('')
+      setEmail('')
+      setTelefono('')
+      setTiempo('')
+      setSalario('')
+      setModoEdicion(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const eliminar = id => {
@@ -152,14 +173,22 @@ const Formulario = () => {
       text: "No podrás deshacer esta acción.",
       icon: 'warning',
       buttons: ["No", "Sí"]
-    }).then((result) => {
+    }).then(async (result) => {
       if (result) {
-        const aux = listaEmpleados.filter(item => item.id !== id)
-        setListaEmpleados(aux)
+        try {
+          const db = firebase.firestore()
+          await db.collection('empleados').doc(id).delete()
+          const aux = listaEmpleados.filter(item => item.id !== id)
+          setListaEmpleados(aux)
+        } catch (error) {
+          console.log(error)
+        }
         swal({
-          title: 'Eliminado',
+          position: 'top-end',
           icon: 'success',
-          timer: '700'
+          title: 'Eliminado',
+          showConfirmButton: false,
+          timer: 700
         })
       }
     })
