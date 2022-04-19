@@ -1,6 +1,7 @@
 import React from "react";
 import { nanoid } from "nanoid";
 import swal from "sweetalert"
+import { firebase } from './firebase'
 
 const Formulario = () => {
   const [nombre, setNombre] = React.useState("");
@@ -15,7 +16,24 @@ const Formulario = () => {
   const [modoEdicion, setModoEdicion] = React.useState(false)
   const [error, setError] = React.useState(null)
 
-  const guardarEmpleado = (e) => {
+  React.useEffect(() => {
+    const obtenerDatos = async () => {
+      try {
+        const db = firebase.firestore()
+        const data = await db.collection('empleados').get()
+        const arrayData = data.docs.map(doc => (
+          { id: doc.id, ...doc.data() }
+        ))
+        //console.log(arrayData)
+        setListaEmpleados(arrayData)
+      } catch (error) {
+
+      }
+    }
+    obtenerDatos();
+  })
+
+  const guardarEmpleado = async (e) => {
     e.preventDefault()
 
     if (!nombre.trim()) {
@@ -47,10 +65,15 @@ const Formulario = () => {
       return
     }
 
-    setListaEmpleados([
+    /*setListaEmpleados([
       ...listaEmpleados,
       { id: nanoid(), aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario }
-    ])
+    ])*/
+    const db = firebase.firestore()
+    const nuevoEmpleado = {
+      aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario
+    }
+    const data = await db.collection('empleados').add(nuevoEmpleado)
 
     e.target.reset()
     setNombre('')
@@ -134,21 +157,12 @@ const Formulario = () => {
         const aux = listaEmpleados.filter(item => item.id !== id)
         setListaEmpleados(aux)
         swal({
-          title:'Eliminado',
-          icon:'success',
-          timer:'700'
+          title: 'Eliminado',
+          icon: 'success',
+          timer: '700'
         })
       }
     })
-
-    //let confirmacion = window.alert("¿Está seguro que desea eliminar a este empleado?")
-    //if (confirmacion === true) {
-    //  const aux = listaEmpleados.filter(item => item.id !== id)
-    //  setListaEmpleados(aux)
-    //} else {
-    //  
-    //}
-
   }
 
   const cancelar = () => {
