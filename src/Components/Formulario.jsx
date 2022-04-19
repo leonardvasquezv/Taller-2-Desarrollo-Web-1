@@ -77,7 +77,7 @@ const Formulario = () => {
       const nuevoEmpleado = {
         aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario
       }
-      const data = await db.collection('empleados').add(nuevoEmpleado)
+      await db.collection('empleados').add(nuevoEmpleado)
 
       setListaEmpleados([
         ...listaEmpleados,
