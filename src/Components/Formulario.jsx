@@ -1,4 +1,6 @@
 import React from "react";
+import { nanoid } from "nanoid";
+import swal from "sweetalert"
 
 const Formulario = () => {
   const [nombre, setNombre] = React.useState("");
@@ -8,44 +10,46 @@ const Formulario = () => {
   const [telefono, setTelefono] = React.useState("");
   const [tiempo, setTiempo] = React.useState("");
   const [salario, setSalario] = React.useState("");
+  const [id, setId] = React.useState("")
   const [listaEmpleados, setListaEmpleados] = React.useState([])
+  const [modoEdicion, setModoEdicion] = React.useState(false)
+  const [error, setError] = React.useState(null)
 
   const guardarEmpleado = (e) => {
     e.preventDefault()
 
     if (!nombre.trim()) {
-      alert('Digite el nombre')
+      setError('Digite el nombre')
       return
     }
     if (!cedula.trim()) {
-      alert('Digite el cedula')
+      setError('Digite la cedula')
       return
     }
     if (!edad.trim()) {
-      alert('Digite el edad')
+      setError('Digite la edad')
       return
     }
     if (!email.trim()) {
-      alert('Digite el email')
+      setError('Digite el email')
       return
     }
     if (!telefono.trim()) {
-      alert('Digite el telefono')
+      setError('Digite el telefono')
       return
     }
     if (!tiempo.trim()) {
-      alert('Digite el tiempo')
+      setError('Digite el tiempo')
       return
     }
     if (!salario.trim()) {
-      alert('Digite el salario')
+      setError('Digite el salario')
       return
     }
 
     setListaEmpleados([
       ...listaEmpleados,
-
-      { aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario }
+      { id: nanoid(), aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario }
     ])
 
     e.target.reset()
@@ -56,36 +60,158 @@ const Formulario = () => {
     setTelefono('')
     setTiempo('')
     setSalario('')
+    setError(null)
+  }
 
+  const editar = item => {
+    setId(item.id)
+    setNombre(item.aNombre)
+    setCedula(item.aCedula)
+    setEdad(item.aEdad)
+    setEmail(item.aEmail)
+    setTelefono(item.aTelefono)
+    setTiempo(item.aTiempo)
+    setSalario(item.aSalario)
+    setModoEdicion(true)
+    setError(null)
+  }
+
+  const editarEmpleado = e => {
+    e.preventDefault()
+
+    if (!nombre.trim()) {
+      setError('Digite el nombre')
+      return
+    }
+    if (!cedula.trim()) {
+      setError('Digite la cedula')
+      return
+    }
+    if (!edad.trim()) {
+      setError('Digite la edad')
+      return
+    }
+    if (!email.trim()) {
+      setError('Digite el email')
+      return
+    }
+    if (!telefono.trim()) {
+      setError('Digite el telefono')
+      return
+    }
+    if (!tiempo.trim()) {
+      setError('Digite el tiempo')
+      return
+    }
+    if (!salario.trim()) {
+      setError('Digite el salario')
+      return
+    }
+
+    const arrayEditado = listaEmpleados.map(
+      item => item.id === id ? { id: id, aNombre: nombre, aCedula: cedula, aEdad: edad, aEmail: email, aTelefono: telefono, aTiempo: tiempo, aSalario: salario } : item
+    )
+    setListaEmpleados(arrayEditado)
+    setId('')
+    setNombre('')
+    setCedula('')
+    setEdad('')
+    setEmail('')
+    setTelefono('')
+    setTiempo('')
+    setSalario('')
+    setModoEdicion(false)
+  }
+
+  const eliminar = id => {
+    swal({
+      title: '¿Estás seguro?',
+      text: "No podrás deshacer esta acción.",
+      icon: 'warning',
+      buttons: ["No", "Sí"]
+    }).then((result) => {
+      if (result) {
+        const aux = listaEmpleados.filter(item => item.id !== id)
+        setListaEmpleados(aux)
+        swal({
+          title:'Eliminado',
+          icon:'success',
+          timer:'700'
+        })
+      }
+    })
+
+    //let confirmacion = window.alert("¿Está seguro que desea eliminar a este empleado?")
+    //if (confirmacion === true) {
+    //  const aux = listaEmpleados.filter(item => item.id !== id)
+    //  setListaEmpleados(aux)
+    //} else {
+    //  
+    //}
+
+  }
+
+  const cancelar = () => {
+    setModoEdicion(false)
+    setId('')
+    setNombre('')
+    setCedula('')
+    setEdad('')
+    setEmail('')
+    setTelefono('')
+    setTiempo('')
+    setSalario('')
+    setError(null)
   }
 
   return (
     <div className="container mt-5">
       <h1 className="text-center">Administrar Empleados</h1>
       <hr />
-      <form onSubmit={guardarEmpleado}>
+      <form onSubmit={modoEdicion ? editarEmpleado : guardarEmpleado} className="text-center">
+        {
+          error ? <span className="text-danger">{error}</span> : null
+        }
         <input className="form-control mb-2" type="text" placeholder="Ingrese Nombre"
           onChange={(e) => setNombre(e.target.value)}
+          value={nombre}
         />
         <input className="form-control mb-2" type="text" placeholder="Ingrese Cedula"
           onChange={(e) => setCedula(e.target.value)}
+          value={cedula}
         />
         <input className="form-control mb-2" type="text" placeholder="Ingrese Edad"
           onChange={(e) => setEdad(e.target.value)}
+          value={edad}
         />
         <input className="form-control mb-2" type="text" placeholder="Ingrese Email"
           onChange={(e) => setEmail(e.target.value)}
+          value={email}
         />
         <input className="form-control mb-2" type="text" placeholder="Ingrese Telefono"
           onChange={(e) => setTelefono(e.target.value)}
+          value={telefono}
         />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Tiempo"
+        <input className="form-control mb-2" type="text" placeholder="Ingrese Tiempo (meses)"
           onChange={(e) => setTiempo(e.target.value)}
+          value={tiempo}
         />
         <input className="form-control mb-2" type="text" placeholder="Ingrese Salario"
           onChange={(e) => setSalario(e.target.value)}
+          value={salario}
         />
-        <button className="btn btn-primary btn-block" type="submit">Agregar</button>
+        {
+          modoEdicion ?
+            (
+              <>
+                <button className="btn btn-warning btn-block" type="submit">Editar</button>
+                <button className="btn btn-dark btn-block" onClick={() => cancelar}>Cancelar</button>
+              </>
+            )
+            :
+            <button className="btn btn-primary btn-block" type="submit">Agregar</button>
+        }
+
       </form>
 
       <div className="row mt-5">
@@ -93,11 +219,11 @@ const Formulario = () => {
           <h4 className="text-center">Listado de Empleados</h4>
           <ul className="list-group">
             {
-              listaEmpleados.map((item, index) => (
-                <li className="list-group-item" key={index}>
-                  <spam className="lead">{item.aNombre} - {item.aCedula} - {item.aEdad} - {item.aEmail} - {item.aTelefono} - {item.aTiempo} - {item.aSalario}</spam>
-                  <button className="btn btn-danger btn-sm float-end mx-2">Eliminar</button>
-                  <button className="btn btn-warning btn-sm float-end mx-2">Editar</button>
+              listaEmpleados.map(item => (
+                <li className="list-group-item" key={item.id}>
+                  <span className="lead">{item.aNombre} - {item.aCedula} - {item.aEdad} - {item.aEmail} - {item.aTelefono} - {item.aTiempo} - {item.aSalario}</span>
+                  <button className="btn btn-danger btn-sm float-end mx-2" onClick={() => eliminar(item.id)}>Eliminar</button>
+                  <button className="btn btn-warning btn-sm float-end mx-2" onClick={() => editar(item)}>Editar</button>
                 </li>
               ))
             }
