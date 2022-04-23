@@ -1,3 +1,8 @@
+body {
+  background-color: #282828;
+  font-family: 'Roboto Mono', monospace;
+}
+
 .App {
   text-align: center;
 }
@@ -36,3 +41,43 @@
     transform: rotate(360deg);
   }
 }
+
+.colortexto {
+  color: white;
+}
+
+.formularioEmpleados {
+  border: 2px solid white;
+}
+
+.ladoFoto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #7FC3DF;
+}
+
+img {
+  width: 100%;
+}
+
+.ladoCajas {
+  padding: 20px;
+}
+
+.txt {
+  border: none;
+  width: 100%;
+  padding: 7px;
+  background-color: transparent;
+  border-bottom: 3px solid #7FC3DF;
+  color: white;
+}
+.txt:focus {
+  outline: none;
+  border-bottom: 3px solid #60E0B5;
+  background: linear-gradient(to top, black, transparent);
+  color: white;
+  transition: 1s;
+}
+

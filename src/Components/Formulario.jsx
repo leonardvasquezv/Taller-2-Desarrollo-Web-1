@@ -2,6 +2,7 @@ import React from "react";
 import { nanoid } from "nanoid";
 import swal from "sweetalert"
 import { firebase } from './firebase'
+import imagenEmpleado from '../img/empleado2.png'
 
 const Formulario = () => {
   const [nombre, setNombre] = React.useState("");
@@ -209,57 +210,66 @@ const Formulario = () => {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center">Administrar Empleados</h1>
-      <hr />
-      <form onSubmit={modoEdicion ? editarEmpleado : guardarEmpleado} className="text-center">
-        {
-          error ? <span className="text-danger">{error}</span> : null
-        }
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Nombre"
-          onChange={(e) => setNombre(e.target.value)}
-          value={nombre}
-        />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Cedula"
-          onChange={(e) => setCedula(e.target.value)}
-          value={cedula}
-        />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Edad"
-          onChange={(e) => setEdad(e.target.value)}
-          value={edad}
-        />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Email"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-        />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Telefono"
-          onChange={(e) => setTelefono(e.target.value)}
-          value={telefono}
-        />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Tiempo (meses)"
-          onChange={(e) => setTiempo(e.target.value)}
-          value={tiempo}
-        />
-        <input className="form-control mb-2" type="text" placeholder="Ingrese Salario"
-          onChange={(e) => setSalario(e.target.value)}
-          value={salario}
-        />
-        {
-          modoEdicion ?
-            (
-              <>
-                <button className="btn btn-warning btn-block" type="submit">Editar</button>
-                <button className="btn btn-dark btn-block" onClick={() => cancelar}>Cancelar</button>
-              </>
-            )
-            :
-            <button className="btn btn-primary btn-block" type="submit">Agregar</button>
-        }
+      <h1 className="text-center row justify-content-center mb-5 colortexto">Administrar Empleados</h1>
+      <div className="container formularioEmpleados">
+        <div className="row">
+          <div className="col-4 ladoFoto">
+          <img src={imagenEmpleado} alt="" />
+          </div>
 
-      </form>
+          <div className="col-8 justify-content-end ladoCajas">
+            <form onSubmit={modoEdicion ? editarEmpleado : guardarEmpleado} className="text-center">
+              {
+                error ? <span className="text-danger">{error}</span> : null
+              }
+              <input className="txt mb-2" type="text" placeholder="Nombre..."
+                onChange={(e) => setNombre(e.target.value)}
+                value={nombre}
+              />
+              <input className="txt mb-2" type="text" placeholder="Cedula..."
+                onChange={(e) => setCedula(e.target.value)}
+                value={cedula}
+              />
+              <input className="txt mb-2" type="text" placeholder="Edad..."
+                onChange={(e) => setEdad(e.target.value)}
+                value={edad}
+              />
+              <input className="txt mb-2" type="text" placeholder="Email..."
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+              <input className="txt mb-2" type="text" placeholder="Telefono..."
+                onChange={(e) => setTelefono(e.target.value)}
+                value={telefono}
+              />
+              <input className="txt mb-2" type="text" placeholder="Tiempo (meses)..."
+                onChange={(e) => setTiempo(e.target.value)}
+                value={tiempo}
+              />
+              <input className="txt mb-2" type="text" placeholder="Salario..."
+                onChange={(e) => setSalario(e.target.value)}
+                value={salario}
+              />
+              {
+                modoEdicion ?
+                  (
+                    <>
+                      <button className="btn btn-warning btn-block" type="submit">Editar</button>
+                      <button className="btn btn-dark btn-block" onClick={() => cancelar}>Cancelar</button>
+                    </>
+                  )
+                  :
+                  <button className="btn btn-primary btn-block mt-4" type="submit">Agregar</button>
+              }
+
+            </form>
+          </div>
+        </div>
+      </div>
 
       <div className="row mt-5">
         <div className="col-12">
-          <h4 className="text-center">Listado de Empleados</h4>
+          <h4 className="text-center colortexto">Listado de Empleados</h4>
           <ul className="list-group">
             {
               listaEmpleados.map(item => (
