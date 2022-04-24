@@ -1,0 +1,3 @@
+Link Amplify: 	https://main.d1hwyry7g6iajl.amplifyapp.com/
+Link Netlify: 	https://harmonious-yeot-506f36.netlify.app/
+Link Repo:    	https://github.com/leonardvasquezv/Taller-2-Desarrollo-Web-1
