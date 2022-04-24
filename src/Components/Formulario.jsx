@@ -214,7 +214,7 @@ const Formulario = () => {
       <div className="container formularioEmpleados">
         <div className="row">
           <div className="col-4 ladoFoto">
-          <img src={imagenEmpleado} alt="" />
+            <img src={imagenEmpleado} alt="" />
           </div>
 
           <div className="col-8 justify-content-end ladoCajas">
@@ -269,13 +269,13 @@ const Formulario = () => {
 
       <div className="row mt-5">
         <div className="col-12">
-          <h4 className="text-center colortexto">Listado de Empleados</h4>
+          <h4 className="text-center mb-3 colortexto">Listado de Empleados</h4>
           <ul className="list-group">
             {
               listaEmpleados.map(item => (
-                <li className="list-group-item" key={item.id}>
+                <li className="list-group-item listadoEmpleados" key={item.id}>
                   <span className="lead">{item.aNombre} - {item.aCedula} - {item.aEdad} - {item.aEmail} - {item.aTelefono} - {item.aTiempo} - {item.aSalario}</span>
-                  <button className="btn btn-danger btn-sm float-end mx-2" onClick={() => eliminar(item.id)}>Eliminar</button>
+                  <button className="btn btn-danger btn-sm float-end mx-2" onClick={() => eliminar(item.id)}>Eliminar</button>    
                   <button className="btn btn-warning btn-sm float-end mx-2" onClick={() => editar(item)}>Editar</button>
                 </li>
               ))
